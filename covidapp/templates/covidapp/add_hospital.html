@@ -5,25 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Hospital</title>
+    <title>Ajouter un hopital</title>
 </head>
 <body>
-    <h1>Add Hospital</h1>
+    <h1>Ajouter un hopital</h1>
 
-    <!-- Form to add a new hospital -->
+    <!-- Form pour ajouter -->
     <form method="post" action="{% url 'add_hospital' %}">
         {% csrf_token %}
-        <label for="name">Name:</label>
+        <label for="name">Nom de l'hopital:</label>
         <input type="text" name="name" required>
         <br>
         <label for="address">Address:</label>
         <input type="text" name="address" required>
         <br>
-        <input type="submit" value="Add Hospital">
+        <input type="submit" value="Ajouter">
     </form>
 
-    <!-- List of hospitals -->
-    <h2>List of Hospitals</h2>
+    <!-- List d'hopitaux -->
+    <h2>Liste d'hopitaux</h2>
     <ul>
         {% for hospital in hospitals %}
             <li>{{ hospital.name }} - {{ hospital.address }} (Created by: {{ hospital.creator }})</li>
@@ -31,13 +31,13 @@
     </ul>
 
     <!-- Manager information -->
-    <p>Logged in as: {{ manager.first_name }} {{ manager.last_name }}</p>
+    <p> Manager connectee: {{ manager.first_name }} {{ manager.last_name }}</p>
     <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
         {% csrf_token %}
         <input type="submit" name="signout" value="Sign Out">
     </form>
 
-    <!-- Link to go back to the manager_dashboard page -->
-    <a href="{% url 'manager_dashboard' manager_id=manager.id %}">Go back to Manager Dashboard</a>
+    <!-- Lien vers la page manager_dashboard -->
+    <a href="{% url 'manager_dashboard' manager_id=manager.id %}">Rentrer a la page Manager Dashboard</a>
 </body>
 </html>

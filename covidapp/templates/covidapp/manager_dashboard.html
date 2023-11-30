@@ -8,21 +8,20 @@
     <title>Manager Dashboard</title>
 </head>
 <body>
-    <h1>Welcome, {{ manager.first_name }} {{ manager.last_name }}!</h1>
+    <h1> {{ manager.first_name }} {{ manager.last_name }}</h1>
 
-    <!-- Add Hospital button -->
+    <!-- Aller vers ajouter un hopital -->
     <form method="get" action="{% url 'add_hospital' %}">
-        <input type="submit" value="Add Hospital">
+        <input type="submit" value="Ajouter un hopital">
     </form>
     
-    <!-- Add Doctor button -->
+    <!-- Aller vers ajouter un docteur -->
     <form method="get" action="{% url 'add_doctor' %}">
-        <input type="submit" value="Add Doctor">
+        <input type="submit" value="Ajouter un docteur">
     </form>
 
     <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
         {% csrf_token %}
-        <!-- Add other content for the manager dashboard as needed -->
         <input type="submit" name="signout" value="Sign Out">
     </form>
 </body>
