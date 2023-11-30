@@ -28,3 +28,11 @@ def login(request):
             messages.error(request, 'Pseudo ou password incorrect')
     
     return render(request, 'covidapp/login.html')
+
+
+# Gestion du dashboard des managers
+def manager_dashboard(request, manager_id):
+    # on recuper les infos concernant le manager en utilsant l'id passer lors du login
+    manager = Manager.objects.get(id=manager_id)
+    # on envoit alors toutes les infos du manager a la page html manager_dashboad
+    return render(request, 'covidapp/manager_dashboard.html', {'manager':manager})
