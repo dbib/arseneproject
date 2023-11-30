@@ -29,3 +29,18 @@ class Hospital(models.Model):
     
     def __str__(self):
         return self.name
+        
+# Model Doctor pour la gestion des medecins
+# ce model a une relation avec Hospital et Manager
+
+class Doctor(models.Model):
+    id = models.AutoField(primary_key=True)
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
+    creator = models.ForeignKey(Manager, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.full_name
