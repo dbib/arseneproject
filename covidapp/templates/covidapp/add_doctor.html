@@ -42,6 +42,9 @@
                 <option value="{{ hospital.id }}">{{ hospital.name }}</option>
             {% endfor %}
         </select>
+        <!-- Link to add hospital page -->
+        <a href="{% url 'add_hospital' %}">If hospital does not exist?</a>
+        <br>
         <br>
         <input type="submit" value="Add Doctor">
     </form>
