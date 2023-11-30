@@ -21,8 +21,13 @@ def login(request):
         # on check si ces donnees existent dans notre table ou feuille Manager
         try:
             manager = Manager.objects.get(pseudo=pseudo, password=password)
-            # Si les donnees exist ie le manager exist on le redirect vers la page
+            # Si les donnees exist ie le manager exist on ajoute une session et le redirect vers la page
             # manager_dashboard avec les donnees (ici manager_id)
+            request.session['manager_id'] = manager.id
+            request.session['manager_pseudo' ] = manager.pseudo
+            request.session['manager_first_name'] = manager.first_name
+            request.session['manager_last_name' ] = manager.last_name
+            #redirection au dashboard manager
             return redirect('manager_dashboard', manager_id=manager.id)
         except Manager.DoesNotExist:
             # si le manager n'existe pas, on envoie un message d'erreur
@@ -34,7 +39,17 @@ def login(request):
 
 # Gestion du dashboard des managers
 def manager_dashboard(request, manager_id):
+    # on check si le manager est deja authentifier en regardans les donnees de session
+    if 'manager_id' not in request.session or request.session['manager_id'] != manager_id:
+        messages.error(request, 'Vous netes pas connecter.')
+        return redirect('login')
     # on recuper les infos concernant le manager en utilsant l'id passer lors du login
     manager = Manager.objects.get(id=manager_id)
+      
+    # ajoutons une gestion de deconnexion
+    if request.method == 'POST' and 'signout' in request.POST:
+        # Efface les donnees enregistrer dans la session avant de se deconnecter
+        request.session.clear()
+        return redirect('login')
     # on envoit alors toutes les infos du manager a la page html manager_dashboad
     return render(request, 'covidapp/manager_dashboard.html', {'manager':manager})

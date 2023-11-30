@@ -1,3 +1,8 @@
 <!-- covidapp/templates/covidapp/manager_dashboard.html -->
 <h1>Welcome, {{ manager.first_name }} {{ manager.last_name }}!</h1>
-<!-- Add other content for the manager dashboard as needed -->
+
+<form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
+    {% csrf_token %}
+    <!-- Add other content for the manager dashboard as needed -->
+    <input type="submit" name="signout" value="Sign Out">
+</form>
