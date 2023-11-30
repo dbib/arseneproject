@@ -8,7 +8,7 @@ from django.db import models
 
 # Create your models here.
 # Model Manager, qui gere les infos de tout les manager de l'application
-class Managet(models.Model):
+class Manager(models.Model):
     id = models.AutoField(primary_key=True)
     pseudo = models.CharField(max_length=50, unique=True)
     first_name = models.CharField(max_length=50)

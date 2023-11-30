@@ -8,6 +8,7 @@ from .models import Manager
 
 # gestion de la connexion ou login
 def login(request):
+    error_message = None # montre l'erreur au cas ou l'utilisateur n'existe pas
     #Ici on recuperer les infos ou donnees contenus dans la page login apres
     # que l'utilisateur est cliquer sur envoyer. Donnees qui sont dans la request
     # on check alors si il s'agit de la requette envoie (POST) pour recuperer les donnees
@@ -25,9 +26,10 @@ def login(request):
             return redirect('manager_dashboard', manager_id=manager.id)
         except Manager.DoesNotExist:
             # si le manager n'existe pas, on envoie un message d'erreur
-            messages.error(request, 'Pseudo ou password incorrect')
+            error_message = 'Pseudo ou password incorrect'
     
-    return render(request, 'covidapp/login.html')
+    # au cas ou l'utilisateur n'existe pas on renvoir a la page login avec l'erreur
+    return render(request, 'covidapp/login.html', {'error_message': error_message})
 
 
 # Gestion du dashboard des managers
