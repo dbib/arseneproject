@@ -65,6 +65,10 @@ def add_hospital(request):
     manager_id = request.session['manager_id']
     manager = Manager.objects.get(id=manager_id)
     
+    # Recuperer la list des hopitaux en le rageant par date et le derniers dajouter comme le premier
+    # ces donnees seront aussi envoyer a la page pour afficher la liste des hopitaux dans la BD
+    hospitals = Hospital.objects.order_by('-id')
+    
     if request.method == 'POST':
         # recuperer les donnes de la formulaire hopital
         name = request.POST['name']
@@ -73,9 +77,9 @@ def add_hospital(request):
         # Creer un nouvel hopital avec le manager connecter comme createur
         Hospital.objects.create(name=name, address=address, creator=manager)
         
-        # Rediriger vers le manager_dashboard
-        return redirect('manager_dashboard', manager_id=manager_id)
+        # Rediriger vers la meme page avec la liste d'hopitaux mise a jour 
+        return redirect('add_hospital')
         
-    return render(request, 'covidapp/add_hospital.html', {'manager':manager})
+    return render(request, 'covidapp/add_hospital.html', {'manager':manager, 'hospitals': hospitals})
     
     

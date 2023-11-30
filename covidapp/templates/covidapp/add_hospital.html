@@ -9,6 +9,8 @@
 </head>
 <body>
     <h1>Add Hospital</h1>
+
+    <!-- Form to add a new hospital -->
     <form method="post" action="{% url 'add_hospital' %}">
         {% csrf_token %}
         <label for="name">Name:</label>
@@ -17,9 +19,25 @@
         <label for="address">Address:</label>
         <input type="text" name="address" required>
         <br>
-        <!-- The creator field is automatically populated with the manager's information -->
-        <input type="hidden" name="creator" value="{{ manager.id }}">
         <input type="submit" value="Add Hospital">
     </form>
+
+    <!-- List of hospitals -->
+    <h2>List of Hospitals</h2>
+    <ul>
+        {% for hospital in hospitals %}
+            <li>{{ hospital.name }} - {{ hospital.address }} (Created by: {{ hospital.creator }})</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Manager information -->
+    <p>Logged in as: {{ manager.first_name }} {{ manager.last_name }}</p>
+    <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
+        {% csrf_token %}
+        <input type="submit" name="signout" value="Sign Out">
+    </form>
+
+    <!-- Link to go back to the manager_dashboard page -->
+    <a href="{% url 'manager_dashboard' manager_id=manager.id %}">Go back to Manager Dashboard</a>
 </body>
 </html>
