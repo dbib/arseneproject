@@ -4,7 +4,7 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Manager, Hospital
+from .models import Manager, Hospital, Doctor
 
 # gestion de la connexion ou login
 def login(request):
@@ -82,4 +82,45 @@ def add_hospital(request):
         
     return render(request, 'covidapp/add_hospital.html', {'manager':manager, 'hospitals': hospitals})
     
+# Ajouter un docteur/ un medecin dans notre base de donne
+def add_doctor(request):
+    # Verifie si le manager est connecter avec les donnee dans la session
+    # Si il y'a aucune connexion on renvoie vers le login du manager
+    if 'manager_id' not in request.session:
+        messages.error(request, 'Vous netes pas connectee')
+        return redirect('login')
     
+    # Recuperer les infos du manager
+    manager_id = request.session['manager_id']
+    manager = Manager.objects.get(id=manager_id)
+    
+    # Recuperer les infos des hopitaux
+    hospitals = Hospital.objects.order_by('name')
+    
+    # Recuperer les donnees dans le formulaire
+    if request.method == 'POST':
+        full_name = request.POST['full_name']
+        email = request.POST['email']
+        password = request.POST['password']
+        address = request.POST['address']
+        creator_id = request.POST['creator']
+        hospital_id = request.POST['hospital']
+
+        # Creer ou enregistrer dans la base de donnee
+        Doctor.objects.create(
+            full_name=full_name,
+            email=email,
+            password=password,
+            address=address,
+            creator_id=creator_id,
+            hospital_id=hospital_id
+        )
+        
+        # Notification d'envoie
+        messages.success(request, 'docteur ajouter. ')
+        
+        # Redirige vers la page add_doctor
+        return redirect('add_doctor')
+    
+    # envoie les donnees au fichier add_doctor.html
+    return render(request, 'covidapp/add_doctor.html', {'manager': manager, 'hospitals':hospitals})

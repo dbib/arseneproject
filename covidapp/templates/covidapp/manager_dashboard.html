@@ -14,6 +14,11 @@
     <form method="get" action="{% url 'add_hospital' %}">
         <input type="submit" value="Add Hospital">
     </form>
+    
+    <!-- Add Doctor button -->
+    <form method="get" action="{% url 'add_doctor' %}">
+        <input type="submit" value="Add Doctor">
+    </form>
 
     <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
         {% csrf_token %}

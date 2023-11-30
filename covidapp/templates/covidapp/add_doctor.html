@@ -1,0 +1,59 @@
+<!-- covidapp/templates/covidapp/add_doctor.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Doctor</title>
+</head>
+<body>
+    <h1>Add a Doctor</h1>
+
+    <!-- Display success message if it exists -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Doctor form -->
+    <form method="post" action="{% url 'add_doctor' %}">
+        {% csrf_token %}
+        <label for="full_name">Full Name:</label>
+        <input type="text" name="full_name" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        <br>
+        <label for="address">Address:</label>
+        <input type="text" name="address" required>
+        <br>
+        <!-- The creator field is automatically populated with the manager's information -->
+        <input type="hidden" name="creator" value="{{ manager.id }}">
+        <label for="hospital">Hospital:</label>
+        <select name="hospital" required>
+            {% for hospital in hospitals %}
+                <option value="{{ hospital.id }}">{{ hospital.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="submit" value="Add Doctor">
+    </form>
+
+    <!-- Manager information -->
+    <p>Logged in as: {{ manager.first_name }} {{ manager.last_name }}</p>
+    <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
+        {% csrf_token %}
+        <input type="submit" name="signout" value="Sign Out">
+    </form>
+
+    <!-- Link to go back to the manager_dashboard page -->
+    <a href="{% url 'manager_dashboard' manager_id=manager.id %}">Go back to Manager Dashboard</a>
+</body>
+</html>
