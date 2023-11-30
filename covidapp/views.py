@@ -4,7 +4,7 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Manager
+from .models import Manager, Hospital
 
 # gestion de la connexion ou login
 def login(request):
@@ -53,3 +53,29 @@ def manager_dashboard(request, manager_id):
         return redirect('login')
     # on envoit alors toutes les infos du manager a la page html manager_dashboad
     return render(request, 'covidapp/manager_dashboard.html', {'manager':manager})
+
+# Ajouter un hopital dans notre base de donnee (dans la feille hopital)
+def add_hospital(request):
+    #On verifie si le manager est authentifier en regardant la session
+    if 'manager_id' not in request.session:
+        messages.error(request, 'Vous netes pas connecter')
+        return redirect('login')
+        
+    # Recuperer les infos du manager de la session si il est connecte
+    manager_id = request.session['manager_id']
+    manager = Manager.objects.get(id=manager_id)
+    
+    if request.method == 'POST':
+        # recuperer les donnes de la formulaire hopital
+        name = request.POST['name']
+        address = request.POST['address']
+        
+        # Creer un nouvel hopital avec le manager connecter comme createur
+        Hospital.objects.create(name=name, address=address, creator=manager)
+        
+        # Rediriger vers le manager_dashboard
+        return redirect('manager_dashboard', manager_id=manager_id)
+        
+    return render(request, 'covidapp/add_hospital.html', {'manager':manager})
+    
+    

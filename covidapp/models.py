@@ -24,7 +24,7 @@ class Manager(models.Model):
 class Hospital(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    adress = models.CharField(max_length = 255)
+    address = models.CharField(max_length = 255)
     creator = models.ForeignKey(Manager, on_delete=models.CASCADE)
     
     def __str__(self):
