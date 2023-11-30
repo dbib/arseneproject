@@ -78,7 +78,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'covidapp2',
-        'USER': 'arkiev',
+        'USER': 'donbach',
         'PASSWORD': 'congo1960pass',
         'HOST': 'localhost',
         'PORT': '3306'
