@@ -1,0 +1,55 @@
+<!-- covidapp/templates/covidapp/add_patient.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Patient</title>
+</head>
+<body>
+    <h1>Add Patient</h1>
+
+    <!-- Display success message if it exists -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Patient form -->
+    <form method="post" action="{% url 'add_patient' %}">
+        {% csrf_token %}
+        <!-- Hidden inputs for doctor and hospital -->
+        <input type="hidden" name="doctor" value="{{ doctor.id }}">
+        <input type="hidden" name="hospital" value="{{ hospital.id }}">
+        <label for="full_name">Full Name:</label>
+        <input type="text" name="full_name" required>
+        <br>
+        <label for="address">Address:</label>
+        <input type="text" name="address" required>
+        <br>
+        <label for="symptoms">Symptoms:</label>
+        <input type="text" name="symptoms" required>
+        <br>
+        <label for="medications">Medications:</label>
+        <input type="text" name="medications" required>
+        <br>
+        <label for="status">Status:</label>
+        <input type="text" name="status" required>
+        <br>
+        <label for="disease_history">Disease History:</label>
+        <input type="text" name="disease_history" required>
+        <br>
+        <label for="contact_number">Contact Number:</label>
+        <input type="text" name="contact_number" required>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- Link to go back to the doctor_dashboard page -->
+    <a href="{% url 'doctor_dashboard' %}">Go back to Doctor Dashboard</a>
+</body>
+</html>

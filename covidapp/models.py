@@ -54,7 +54,7 @@ class Patient(models.Model):
     symptoms = models.TextField()
     medications = models.TextField()
     status = models.CharField(max_length=50)
-    disease_histoty = models.TextField()
+    disease_history = models.TextField()
     contact_number = models.CharField(max_length=20)
     hospital = models.ForeignKey('Hospital', on_delete=models.CASCADE)
     doctor = models.ForeignKey('Doctor', on_delete=models.CASCADE)

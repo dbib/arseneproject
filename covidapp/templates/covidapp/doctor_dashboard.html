@@ -14,6 +14,9 @@
     <p>Email: {{ doctor.email }}</p>
     <p>Hospital: {{ doctor.hospital.name }}</p>
 
+    <!-- Add Patient button -->
+    <a href="{% url 'add_patient' %}">Add Patient</a>
+
     <!-- Sign-out button -->
     <form method="post" action="{% url 'doctor_signout' %}">
         {% csrf_token %}

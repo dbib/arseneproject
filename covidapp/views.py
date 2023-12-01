@@ -4,7 +4,7 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Manager, Hospital, Doctor
+from .models import Manager, Hospital, Doctor, Patient
 
 # Page d'accueil
 def home(request):
@@ -173,3 +173,47 @@ def doctor_signout(request):
         del request.session['doctor_id']
         
     return redirect('doctor_login')
+
+# Ajouter un patient
+def add_patient(request):
+    # Check if doctor is authenticated by checking session data
+    if 'doctor_id' not in request.session:
+        messages.error(request, 'You are not authenticated. Please log in.')
+        return redirect('doctor_login')
+
+    # Retrieve doctor information from session data
+    doctor_id = request.session['doctor_id']
+    doctor = Doctor.objects.get(id=doctor_id)
+
+    # Retrieve hospital information from doctor's associated hospital
+    hospital = doctor.hospital
+
+    if request.method == 'POST':
+        # Process the form data when submitted
+        full_name = request.POST['full_name']
+        address = request.POST['address']
+        symptoms = request.POST['symptoms']
+        medications = request.POST['medications']
+        status = request.POST['status']
+        disease_history = request.POST['disease_history']
+        contact_number = request.POST['contact_number']
+
+        # Create a new patient record in the database
+        patient = Patient.objects.create(
+            full_name=full_name,
+            address=address,
+            symptoms=symptoms,
+            medications=medications,
+            status=status,
+            disease_history=disease_history,
+            contact_number=contact_number,
+            hospital=hospital,
+            doctor=doctor
+        )
+
+        messages.success(request, 'Patient successfully added.')
+        return redirect('doctor_dashboard')
+
+    return render(request, 'covidapp/add_patient.html', {'doctor': doctor, 'hospital': hospital})
+
+# Pour afficher la liste complete des patients
