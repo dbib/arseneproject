@@ -1,0 +1,42 @@
+<!-- covidapp/templates/covidapp/register_user.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<body>
+    <h1>User Registration</h1>
+
+    <!-- Display form errors -->
+    {% if form.errors %}
+        <ul class="errors">
+            {% for field, error_list in form.errors.items %}
+                {% for error in error_list %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- User registration form -->
+    <form method="post" action="{% url 'register_user' %}">
+        {% csrf_token %}
+        <label for="{{ form.full_name.id_for_label }}">Full Name:</label>
+        {{ form.full_name }}
+        <br>
+        <label for="{{ form.email.id_for_label }}">Email:</label>
+        {{ form.email }}
+        <br>
+        <label for="{{ form.password.id_for_label }}">Password:</label>
+        {{ form.password }}
+        <br>
+        <input type="submit" value="Register">
+    </form>
+
+    <!-- Link to go back to the home page -->
+    <a href="{% url 'home' %}">Go back to Home</a>
+</body>
+</html>

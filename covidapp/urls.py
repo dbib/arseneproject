@@ -13,5 +13,6 @@ urlpatterns = [
     path('doctor_signout/', views.doctor_signout, name='doctor_signout'),
     path('add_patient/', views.add_patient, name='add_patient'),
     path('patient_list/', views.patient_list, name='patient_list'),
+    path('register_user/', views.register_user, name='register_user'),
     # Add other URLs as needed
 ]

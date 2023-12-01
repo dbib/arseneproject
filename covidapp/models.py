@@ -61,3 +61,12 @@ class Patient(models.Model):
     
     def __str__(self):
         return self.full_name
+
+# ajoutons un Model pour les utilisateurs
+class User(models.Model):
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.full_name

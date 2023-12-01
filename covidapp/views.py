@@ -5,6 +5,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Manager, Hospital, Doctor, Patient
+from .forms import UserForm, DoctorForm
+from django.contrib.auth.decorators import login_required
 
 # Page d'accueil
 def home(request):
@@ -236,3 +238,29 @@ def patient_list(request):
     patients = Patient.objects.filter(hospital=hospital)
 
     return render(request, 'covidapp/patient_list.html', {'hospital': hospital, 'doctor': doctor, 'patients': patients})
+    
+
+# cette function gere l'enregistrement des nouveax utilisateurs
+def register_user(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            # Automatically log in the user after registration
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            
+            if user:
+                login(request, user)
+                messages.success(request, 'User registration successful. You are now logged in.')
+                return redirect('user_login')
+            else:
+                messages.error(request, 'User registration successful, but failed to log in.')
+        else:
+            messages.error(request, 'Invalid form submission. Please check the details.')
+    else:
+        form = UserForm()
+
+    return render(request, 'covidapp/register_user.html', {'form': form})
