@@ -11,7 +11,7 @@ def home(request):
     return render(request, 'covidapp/home.html')
 
 # gestion de la connexion ou login des managers
-def login(request):
+def manager_login(request):
     error_message = None # montre l'erreur au cas ou l'utilisateur n'existe pas
     #Ici on recuperer les infos ou donnees contenus dans la page login apres
     # que l'utilisateur est cliquer sur envoyer. Donnees qui sont dans la request
@@ -38,7 +38,7 @@ def login(request):
             error_message = 'Pseudo ou password incorrect'
     
     # au cas ou l'utilisateur n'existe pas on renvoir a la page login avec l'erreur
-    return render(request, 'covidapp/login.html', {'error_message': error_message})
+    return render(request, 'covidapp/manager_login.html', {'error_message': error_message})
 
 
 # Gestion du dashboard des managers
@@ -46,7 +46,7 @@ def manager_dashboard(request, manager_id):
     # on check si le manager est deja authentifier en regardans les donnees de session
     if 'manager_id' not in request.session or request.session['manager_id'] != manager_id:
         messages.error(request, 'Vous netes pas connecter.')
-        return redirect('login')
+        return redirect('manager_login')
     # on recuper les infos concernant le manager en utilsant l'id passer lors du login
     manager = Manager.objects.get(id=manager_id)
       
@@ -54,7 +54,7 @@ def manager_dashboard(request, manager_id):
     if request.method == 'POST' and 'signout' in request.POST:
         # Efface les donnees enregistrer dans la session avant de se deconnecter
         request.session.clear()
-        return redirect('login')
+        return redirect('manager_login')
     # on envoit alors toutes les infos du manager a la page html manager_dashboad
     return render(request, 'covidapp/manager_dashboard.html', {'manager':manager})
 
@@ -63,7 +63,7 @@ def add_hospital(request):
     #On verifie si le manager est authentifier en regardant la session
     if 'manager_id' not in request.session:
         messages.error(request, 'Vous netes pas connecter')
-        return redirect('login')
+        return redirect('manager_login')
         
     # Recuperer les infos du manager de la session si il est connecte
     manager_id = request.session['manager_id']
@@ -92,7 +92,7 @@ def add_doctor(request):
     # Si il y'a aucune connexion on renvoie vers le login du manager
     if 'manager_id' not in request.session:
         messages.error(request, 'Vous netes pas connectee')
-        return redirect('login')
+        return redirect('manager_login')
     
     # Recuperer les infos du manager
     manager_id = request.session['manager_id']
@@ -159,11 +159,15 @@ def doctor_dashboard(request):
     if 'doctor_id' not in request.session:
         messages.error(request, 'Veuillez vous connecter')
         return redirect('doctor_login')
-        
+    
+    # Recuperer les infos sur le medecin    
     doctor_id = request.session['doctor_id']
     doctor = Doctor.objects.get(id=doctor_id)
     
-    return render(request, 'covidapp/doctor_dashboard.html', {'doctor':doctor})
+    # recuperer la liste des patient du docteur
+    patients = Patient.objects.filter(doctor=doctor)
+    
+    return render(request, 'covidapp/doctor_dashboard.html', {'doctor':doctor, 'patients':patients})
 
 # Gestion de la deconnexion de docteur
 def doctor_signout(request):
@@ -217,3 +221,18 @@ def add_patient(request):
     return render(request, 'covidapp/add_patient.html', {'doctor': doctor, 'hospital': hospital})
 
 # Pour afficher la liste complete des patients
+def patient_list(request):
+    # Check if doctor is authenticated by checking session data
+    if 'doctor_id' not in request.session:
+        messages.error(request, 'You are not authenticated. Please log in.')
+        return redirect('doctor_login')
+
+    # Retrieve doctor information from session data
+    doctor_id = request.session['doctor_id']
+    doctor = Doctor.objects.get(id=doctor_id)
+    hospital = doctor.hospital
+
+    # Retrieve all patients associated with the doctor
+    patients = Patient.objects.filter(hospital=hospital)
+
+    return render(request, 'covidapp/patient_list.html', {'hospital': hospital, 'doctor': doctor, 'patients': patients})

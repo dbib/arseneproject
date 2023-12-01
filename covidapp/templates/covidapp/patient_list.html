@@ -1,0 +1,26 @@
+<!-- covidapp/templates/covidapp/patient_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient List</title>
+</head>
+<body>
+    <h1>Patient List</h1>
+
+    <!-- Display doctor information -->
+    <p>Hopital: {{ hospital.name }}</p>
+
+    <!-- Display all patients associated with the doctor -->
+    <ul>
+        {% for patient in patients %}
+            <li>{{ patient.full_name }} - {{ patient.contact_number }} - {{ patient.medications }} - {{ patient.status }} - {{ patient.doctor }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Link to go back to the doctor_dashboard page -->
+    <a href="{% url 'doctor_dashboard' %}">Go back to Doctor Dashboard</a>
+</body>
+</html>

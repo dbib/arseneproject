@@ -17,10 +17,20 @@
     <!-- Add Patient button -->
     <a href="{% url 'add_patient' %}">Add Patient</a>
 
+    <!-- See All Patients button -->
+    <a href="{% url 'patient_list' %}">See All Patients</a>
+
     <!-- Sign-out button -->
     <form method="post" action="{% url 'doctor_signout' %}">
         {% csrf_token %}
         <input type="submit" value="Sign Out">
+    
+    <p> Mes patients </p>    
+    <ul>
+        {% for patient in patients %}
+            <li>{{ patient.full_name }} - {{ patient.contact_number }}</li>
+        {% endfor %}
+    </ul>
     </form>
 </body>
 </html>

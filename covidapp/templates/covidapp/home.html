@@ -8,15 +8,12 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>Welcome to Our Website</h1>
+    <h1>Welcome to the COVID App</h1>
 
-    <!-- Add your website content here -->
+    <!-- Connect as a Doctor button -->
+    <a href="{% url 'doctor_login' %}">Connect as a Doctor</a>
 
-    <footer>
-        <!-- Link to connect as a doctor -->
-        <a href="{% url 'doctor_login' %}">Connect as a Doctor</a>
-        <!-- Link to connect as a manager -->
-        <a href="{% url 'login' %}">Connect as a Manager</a>
-    </footer>
+    <!-- Connect as a Manager button -->
+    <a href="{% url 'manager_login' %}">Connect as a Manager</a>
 </body>
 </html>
