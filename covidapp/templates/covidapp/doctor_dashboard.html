@@ -1,0 +1,23 @@
+<!-- covidapp/templates/covidapp/doctor_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ doctor.full_name }}!</h1>
+
+    <!-- Display doctor information -->
+    <p>Email: {{ doctor.email }}</p>
+    <p>Hospital: {{ doctor.hospital.name }}</p>
+
+    <!-- Sign-out button -->
+    <form method="post" action="{% url 'doctor_signout' %}">
+        {% csrf_token %}
+        <input type="submit" value="Sign Out">
+    </form>
+</body>
+</html>

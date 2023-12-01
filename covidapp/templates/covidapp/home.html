@@ -1,0 +1,22 @@
+<!-- covidapp/templates/covidapp/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to Our Website</h1>
+
+    <!-- Add your website content here -->
+
+    <footer>
+        <!-- Link to connect as a doctor -->
+        <a href="{% url 'doctor_login' %}">Connect as a Doctor</a>
+        <!-- Link to connect as a manager -->
+        <a href="{% url 'login' %}">Connect as a Manager</a>
+    </footer>
+</body>
+</html>

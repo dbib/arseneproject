@@ -6,7 +6,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Manager, Hospital, Doctor
 
-# gestion de la connexion ou login
+# Page d'accueil
+def home(request):
+    return render(request, 'covidapp/home.html')
+
+# gestion de la connexion ou login des managers
 def login(request):
     error_message = None # montre l'erreur au cas ou l'utilisateur n'existe pas
     #Ici on recuperer les infos ou donnees contenus dans la page login apres
@@ -124,3 +128,48 @@ def add_doctor(request):
     
     # envoie les donnees au fichier add_doctor.html
     return render(request, 'covidapp/add_doctor.html', {'manager': manager, 'hospitals':hospitals})
+
+# Creons le login pour le docteur
+def doctor_login(request):
+    # On recupere les donnees ou elements envoie depuis le formulaire login docteur
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        
+        #On essaie de voir si il existe dans la BD un docteur a qui ces elements correspondent
+        try:
+            doctor = Doctor.objects.get(email=email, password=password)
+        except Doctor.DoesNotExist:
+            # Si les elements ne correspondent a personne on renvoie a la page login avec
+            # une notification d'erreur
+            message.error(request, 'Email ou mot de passe incorrect')
+            return redirect('doctor_login')
+            
+        # Si les elements correspondent a ceux d'un docteur dans la BD, on cree une session
+        # pour cet utilisateur et on l'envoie a la page doctor_dashboad
+        request.session['doctor_id'] = doctor.id
+        return redirect('doctor_dashboard')
+        
+    return render(request, 'covidapp/doctor_login.html')
+
+
+# Gestion du dashboard doctor
+def doctor_dashboard(request):
+    # verifier si le docteur est bien authentifier
+    if 'doctor_id' not in request.session:
+        messages.error(request, 'Veuillez vous connecter')
+        return redirect('doctor_login')
+        
+    doctor_id = request.session['doctor_id']
+    doctor = Doctor.objects.get(id=doctor_id)
+    
+    return render(request, 'covidapp/doctor_dashboard.html', {'doctor':doctor})
+
+# Gestion de la deconnexion de docteur
+def doctor_signout(request):
+    # Verifie si le doctor est authentifier dans les donnees session
+    if 'doctor_id' in request.session:
+        # Deconnecter le docteur
+        del request.session['doctor_id']
+        
+    return redirect('doctor_login')
