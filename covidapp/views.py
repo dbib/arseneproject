@@ -7,6 +7,7 @@ from django.contrib import messages
 from .models import Manager, Hospital, Doctor, Patient
 from .forms import UserForm, DoctorForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
 # Page d'accueil
 def home(request):
@@ -247,7 +248,7 @@ def register_user(request):
         if form.is_valid():
             form.save()
 
-            # Automatically log in the user after registration
+            # Login automatic apres la creation de compte/registration
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
