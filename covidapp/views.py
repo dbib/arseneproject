@@ -4,8 +4,8 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Manager, Hospital, Doctor, Patient
-from .forms import UserForm, DoctorForm
+from .models import Manager, Hospital, Doctor, Patient, User
+from .forms import UserRegistrationForm, UserLoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 
@@ -242,26 +242,55 @@ def patient_list(request):
     
 
 # cette function gere l'enregistrement des nouveax utilisateurs
-def register_user(request):
+def user_registration(request):
     if request.method == 'POST':
-        form = UserForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            # on verifie si l'email ecrit existe deja dans notre BD
+            if User.objects.filter(email=form.cleaned_data['email']).exists():
+                return render(request, 'covidapp/user_registration.html', {'form': form, 'error': 'Email existe deja, veuillez le changer'})
+            
+            # on verifier si le password sont correct
+            if form.cleaned_data['password'] != form.cleaned_data['confirm_password']:
+                return render(request, 'covidapp/user_registration.html', {'form': form, 'error':'le password ne correspondent pas.'})
+            
+            # Si tout va bien, On cree un nouveau utilisateur
+            user = form.save()
+            # On redirige l'utilisateur a la page user login
+            messages.success(request, 'Vous enregistez avec succee, veuillez aller a login pour vous connectez')
+            # Redirect a login
+            return redirect('user_login')
+    else:
+        form = UserRegistrationForm()
+    
+    # L'Etat initial du formulaire sans erreur
+    return render(request, 'covidapp/user_registration.html', {'form':form, 'error': None})
 
-            # Login automatic apres la creation de compte/registration
+# Cree la page user login
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user = authenticate(request, email=email, password=password)
-            
-            if user:
-                login(request, user)
-                messages.success(request, 'User registration successful. You are now logged in.')
-                return redirect('user_login')
-            else:
-                messages.error(request, 'User registration successful, but failed to log in.')
-        else:
-            messages.error(request, 'Invalid form submission. Please check the details.')
-    else:
-        form = UserForm()
 
-    return render(request, 'covidapp/register_user.html', {'form': form})
+            # Authenticate user
+            user = authenticate(request, email=email, password=password)
+
+            if user is not None:
+                # Login the user
+                login(request, user)
+                # Redirect to the user dashboard page
+                return redirect('user_dash')
+            else:
+                # Display error message
+                messages.error(request, 'Invalid email or password.')
+
+    else:
+        form = UserLoginForm()
+
+    return render(request, 'covidapp/user_login.html', {'form': form})
+
+# gestion du user dashboard
+def user_dash(request):
+    return render(request, 'covidapp/user_dash.html')
