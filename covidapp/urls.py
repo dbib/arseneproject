@@ -1,7 +1,7 @@
 # ajout des urls de notre application
 from django.urls import path
 from . import views
-from .views import user_registration, user_login, user_dash
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -14,8 +14,9 @@ urlpatterns = [
     path('doctor_signout/', views.doctor_signout, name='doctor_signout'),
     path('add_patient/', views.add_patient, name='add_patient'),
     path('patient_list/', views.patient_list, name='patient_list'),
-    path('user_registration/', user_registration, name='user_registration'),
-    path('user_login/', user_login, name='user_login'),
-    path('user_dash/', user_dash, name='user_dash'),
+    path('user_registration/', views.user_registration, name='user_registration'),
+    path('user_login/', views.user_login, name='user_login'),
+    path('user_dashboard/', views.user_dashboard, name='user_dashboard'),
+    path('user_logout/', views.user_logout, name='user_logout'),
     # Add other URLs as needed
 ]

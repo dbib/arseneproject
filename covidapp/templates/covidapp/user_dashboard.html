@@ -1,0 +1,10 @@
+<!-- covidapp/templates/user_dashboard.html -->
+{% block content %}
+  <h2>User Dashboard</h2>
+  <h3>Welcome, {{ user.full_name }}!</h3>
+  <!-- Sign-out button -->
+    <form method="post" action="{% url 'user_logout' %}">
+        {% csrf_token %}
+        <input type="submit" value="Log Out">
+  <p>Welcome to your user dashboard!</p>
+{% endblock %}

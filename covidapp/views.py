@@ -5,7 +5,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Manager, Hospital, Doctor, Patient, User
-from .forms import UserRegistrationForm, UserLoginForm
+from .forms import UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 
@@ -268,29 +268,45 @@ def user_registration(request):
 
 # Cree la page user login
 def user_login(request):
+    # recuperation des donnee envoyer depuis le formulaire
     if request.method == 'POST':
-        form = UserLoginForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-
-            # Authenticate user
-            user = authenticate(request, email=email, password=password)
-
-            if user is not None:
-                # Login the user
-                login(request, user)
-                # Redirect to the user dashboard page
-                return redirect('user_dash')
-            else:
-                # Display error message
-                messages.error(request, 'Invalid email or password.')
-
-    else:
-        form = UserLoginForm()
-
-    return render(request, 'covidapp/user_login.html', {'form': form})
-
+        email = request.POST['email']
+        password = request.POST['password']
+        
+        # Check pour voir si il y a une correspondance dans la BD
+        try:
+            user = User.objects.get(email=email, password=password)
+        except User.DoesNotExist:
+            # si il n'ya aucune correspondance
+            messages.error(request, 'Email ou mot de passe incorrect')
+            return redirect('user_login')
+        
+        # s'il y a bel et bien correspondance
+        # On cree une session pour le user
+        request.session['user_id'] = user.id
+        return redirect('user_dashboard')
+    
+    return render(request, 'covidapp/user_login.html')
 # gestion du user dashboard
-def user_dash(request):
-    return render(request, 'covidapp/user_dash.html')
+def user_dashboard(request):
+    # verifier si le user est authentifier
+    if 'user_id' not in request.session:
+        messages.error(request, 'Veuillez vous connect')
+        return redirect('user_login')
+    
+    # Recuper les infos du user si il est authentifier
+    user_id = request.session['user_id']
+    user = User.objects.get(id=user_id)
+    
+    # Afficher la page user dashboard
+    return render(request, 'covidapp/user_dashboard.html', {'user':user})
+
+# La deconnexion de l'utilisateur
+def user_logout(request):
+    #verifier si le user est authentifier dans la BD
+    if 'user_id' in request.session:
+        # deconnecter
+        del request.session['user_id']
+        
+    return redirect('user_login')
+
