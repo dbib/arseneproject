@@ -4,7 +4,7 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Manager, Hospital, Doctor, Patient, User
+from .models import Manager, Hospital, Doctor, Patient, User, Attente
 from .forms import UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -310,3 +310,39 @@ def user_logout(request):
         
     return redirect('user_login')
 
+# S'ajouter a la liste d'attente ou demande une consultation
+def ask_consultation(request):
+    # verifier si le user est connecter
+    if 'user_id' not in request.session:
+        # s'il n'est pas connecter on le redirige vers la user login page
+        messages.error(request, 'Veuillez vous connecter')
+        return redirect('user_login')
+    
+    # Recuperer les infos du user de la session
+    user_id = request.session['user_id']
+    user = User.objects.get(id=user_id)
+    
+    # Recuperer la liste des docteurs par hopital
+    doctors = Doctor.objects.order_by('name')
+    
+    # Recuperer les elements du formulaire
+    if request.method == 'POST':
+        full_name = request.POST['full_name']
+        email = request.POST['email']
+        doctor = request.POST['doctor']
+    
+    # Enregistrer dans la BD
+    Attente.objects.create(
+        full_name=full_name,
+        email=email,
+        doctor=doctor
+    )
+    
+    # Notification d'ajout a la liste
+    messages.success(request, 'Vous avez ete ajouter a la liste demande de consultation')
+    
+    # Rediriger vers la page user dashboard
+    return redirect('user_dashboard')
+    
+    # envoie ou setup des donnees a la page html
+    return render(request, 'covidapp/ask_consultation.html', {'user': user, 'doctors':doctors})

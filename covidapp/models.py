@@ -70,3 +70,13 @@ class User(models.Model):
 
     def __str__(self):
         return self.full_name
+
+# Model pour la liste d'attente ou demande de consultations
+class Attente(models.Model):
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    time = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.full_name

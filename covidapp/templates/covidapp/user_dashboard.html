@@ -2,6 +2,8 @@
 {% block content %}
   <h2>User Dashboard</h2>
   <h3>Welcome, {{ user.full_name }}!</h3>
+  <!-- Add Patient button -->
+    <a href="{% url 'ask_consultation' %}">Demander une consultation</a>
   <!-- Sign-out button -->
     <form method="post" action="{% url 'user_logout' %}">
         {% csrf_token %}
