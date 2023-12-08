@@ -26,16 +26,16 @@
         <input type="hidden" name="doctor" value="{{ doctor.id }}">
         <input type="hidden" name="hospital" value="{{ hospital.id }}">
         <label for="full_name">Full Name:</label>
-        <input type="text" name="full_name" required>
+        <input type="text" name="full_name" value="{{ initial_data.full_name }}" required>
         <br>
         <label for="birth_date">date de naissance:</label>
         <input type="date" name="birth_date" required>
         <br>
         <label for="email">Email:</label>
-        <input type="email" name="email" required>
+        <input type="email" name="email" value="{{ initial_data.email }}" required>
         <br>
         <label for="phone">Numero de tel:</label>
-        <input type="tel" name="phone" required>
+        <input type="tel" name="phone" value="{{ initial_data.phone }}" required>
         <br>
         <label for="address">Address:</label>
         <input type="text" name="address" required>

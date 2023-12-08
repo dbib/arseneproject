@@ -1,4 +1,3 @@
-<!-- covidapp/templates/covidapp/doctor_dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,31 +5,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
+    <!-- Add your CSS styles here if needed -->
 </head>
 <body>
-    <h1>Welcome, {{ doctor.full_name }}!</h1>
+    <header>
+        <h1>Welcome, {{ doctor.full_name }}!</h1>
 
-    <!-- Display doctor information -->
-    <p>Email: {{ doctor.email }}</p>
-    <p>Hospital: {{ doctor.hospital.name }}</p>
+        <!-- Display doctor information -->
+        <p>Email: {{ doctor.email }}</p>
+        <p>Hospital: {{ doctor.hospital.name }}</p>
+    </header>
 
-    <!-- Add Patient button -->
-    <a href="{% url 'add_patient' %}">Add Patient</a>
+    <nav>
+        <!-- Add Patient button -->
+        <a href="{% url 'add_patient' %}" class="btn btn-primary">Add Patient</a>
 
-    <!-- See All Patients button -->
-    <a href="{% url 'patient_list' %}">See All Patients</a>
+        <!-- See All Patients button -->
+        <a href="{% url 'patient_list' %}" class="btn btn-secondary">See All Patients</a>
 
-    <!-- Sign-out button -->
-    <form method="post" action="{% url 'doctor_signout' %}">
-        {% csrf_token %}
-        <input type="submit" value="Sign Out">
-    
-    <p> Mes patients </p>    
-    <ul>
-        {% for patient in patients %}
-            <li>{{ patient.full_name }} - {{ patient.contact_number }}</li>
-        {% endfor %}
-    </ul>
-    </form>
+        <!-- Sign-out button -->
+        <form method="post" action="{% url 'doctor_signout' %}">
+            {% csrf_token %}
+            <input type="submit" value="Sign Out" class="btn btn-danger">
+        </form>
+    </nav>
+
+    <section>
+        <h2>Mes patients</h2>
+        <ul>
+            {% for patient in patients %}
+                <li>{{ patient.full_name }} - {{ patient.phone }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <!-- Section for displaying a clickable list of users from Attente -->
+    <section>
+        <h2>Liste d'attente</h2>
+        <ul>
+            {% for user_in_attente in users_in_attente %}
+                <li>
+                    <a href="{% url 'add_patient' %}?attente_id={{ user_in_attente.id }}">
+                        {{ user_in_attente.full_name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
 </body>
 </html>

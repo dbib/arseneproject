@@ -170,7 +170,10 @@ def doctor_dashboard(request):
     # recuperer la liste des patient du docteur
     patients = Patient.objects.filter(doctor=doctor)
     
-    return render(request, 'covidapp/doctor_dashboard.html', {'doctor':doctor, 'patients':patients})
+    # Recuperer la liste d'attente
+    users_in_attente = Attente.objects.filter(hospital = doctor.hospital.id)
+    
+    return render(request, 'covidapp/doctor_dashboard.html', {'doctor':doctor, 'patients':patients, 'users_in_attente': users_in_attente})
 
 # Gestion de la deconnexion de docteur
 def doctor_signout(request):
@@ -183,20 +186,20 @@ def doctor_signout(request):
 
 # Ajouter un patient
 def add_patient(request):
-    # Check if doctor is authenticated by checking session data
+    # Verifier si le docteur est authentifier pour ajouter un patient
     if 'doctor_id' not in request.session:
         messages.error(request, 'You are not authenticated. Please log in.')
         return redirect('doctor_login')
 
-    # Retrieve doctor information from session data
+    # Recuperer les donnees du serveur
     doctor_id = request.session['doctor_id']
     doctor = Doctor.objects.get(id=doctor_id)
 
-    # Retrieve hospital information from doctor's associated hospital
+    # Recuperer le nom de l'hopital ou le docteur exerce
     hospital = doctor.hospital
 
     if request.method == 'POST':
-        # Process the form data when submitted
+        # Recuperer les donnes du formulaire
         full_name = request.POST['full_name']
         birth_date = request.POST['birth_date']
         email = request.POST['email']
@@ -207,7 +210,7 @@ def add_patient(request):
         status = request.POST['status']
         disease_history = request.POST['disease_history']
 
-        # Create a new patient record in the database
+        # Creer ou ajouter un nouveau patient dans la base des donnees
         patient = Patient.objects.create(
             full_name=full_name,
             birth_date=birth_date,
@@ -224,8 +227,36 @@ def add_patient(request):
 
         messages.success(request, 'Patient successfully added.')
         return redirect('doctor_dashboard')
+    
+    # Si le patient est selectionner depuis la liste d'attente
+    attente_id = request.GET.get('attente_id')
+    if attente_id:
+        try:
+            #Recuperer les donnes de la liste d'attente
+            attente_user = Attente.objects.get(id=attente_id)
+        except Attente.DoesNotExist:
+            messages.error(request, 'Le patient nest pas disponible')
+            return redirect('doctor_dashboard')
+        
+        # Completer certaines parties du formulaire add patient
+        initial_data = {
+            'full_name': attente_user.full_name,
+            'email': attente_user.email,
+            'phone': attente_user.phone,
+            'address': '',
+            'symptoms': '',
+            'medications': '',
+            'status': '',
+            'disease_history': '',
+        }
+        
+        # Passer les donner initial au formulaire
+        return render(request, 'covidapp/add_patient.html', {'doctor': doctor, 'hospital': hospital, 'initial_data': initial_data})
+    else:
+        # Creer un formulaire vide
+        return render(request, 'covidapp/add_patient.html', {'doctor': doctor, 'hospital': hospital, 'initial_data': None})
 
-    return render(request, 'covidapp/add_patient.html', {'doctor': doctor, 'hospital': hospital})
+    return render(request, 'covidapp/add_patient.html', {'doctor': doctor, 'hospital': hospital, 'initial_data': None})
 
 # Pour afficher la liste complete des patients
 def patient_list(request):
@@ -295,15 +326,18 @@ def user_login(request):
 def user_dashboard(request):
     # verifier si le user est authentifier
     if 'user_id' not in request.session:
-        messages.error(request, 'Veuillez vous connect')
+        messages.error(request, "Veuillez vous connect")
         return redirect('user_login')
     
     # Recuper les infos du user si il est authentifier
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
     
+    # Rechercher les donnes relatives a l'historique du user dans la table patient
+    user_patients = Patient.objects.filter(email=user.email)
+    
     # Afficher la page user dashboard
-    return render(request, 'covidapp/user_dashboard.html', {'user':user})
+    return render(request, 'covidapp/user_dashboard.html', {'user':user, 'user_patients': user_patients})
 
 # La deconnexion de l'utilisateur
 def user_logout(request):
@@ -318,7 +352,7 @@ def user_logout(request):
 def ask_consultation(request):
     # verifier si l'utilisateur est authentifier
     if 'user_id' not in request.session:
-        messages.error(request, 'Vous netes pas connectee')
+        messages.error(request, "Vous n'etes pas connecté, veuillez vous connecter")
         return redirect('user_login')
         
     # Recuperer les donnees dont nous auront besoin dans notre formulaire
@@ -344,7 +378,7 @@ def ask_consultation(request):
         )
         
         # Notification d'envoie
-        messages.success(request, 'vous avez ete ajouter aa la liste dattente')
+        messages.success(request, "vous avez été ajouté à la liste dattente")
     
         # Rediriger au user_dashboard
         return redirect('user_dashboard')

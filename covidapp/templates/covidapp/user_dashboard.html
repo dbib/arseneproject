@@ -3,18 +3,41 @@
   <h2>User Dashboard</h2>
   <h3>Welcome, {{ user.full_name }}!</h3>
   {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
   <!-- Add Patient button -->
-    <a href="{% url 'ask_consultation' %}">Demander une consultation</a>
-    <br>
+  <a href="{% url 'ask_consultation' %}" class="btn btn-primary">Demander une consultation</a>
+  <br>
+
   <!-- Sign-out button -->
-    <form method="post" action="{% url 'user_logout' %}">
-        {% csrf_token %}
-        <input type="submit" value="Log Out">
+  <form method="post" action="{% url 'user_logout' %}">
+    {% csrf_token %}
+    <input type="submit" value="Log Out" class="btn btn-danger">
+  </form>
+
+  <!-- User History Section -->
+  <h3>User History</h3>
+  {% if user_patients %}
+    <ul>
+      {% for patient in user_patients %}
+        <li>
+          <strong>Doctor Name:</strong> {{ patient.doctor.full_name }}<br>
+          <strong>Symptoms:</strong> {{ patient.symptoms }}<br>
+          <strong>Status:</strong> {{ patient.status }}<br>
+          <strong>Date:</strong> {{ patient.date }}<br>
+          <strong>Medications:</strong> {{ patient.medications }}<br>
+          <strong>Hospital:</strong> {{ patient.hospital.name }}<br>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No patient history available.</p>
+  {% endif %}
+
   <p>Welcome to your user dashboard!</p>
 {% endblock %}
