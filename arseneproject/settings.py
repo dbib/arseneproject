@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'arseneproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'covidapp2',
+        'NAME': 'covidapp4',
         'USER': 'donbach',
         'PASSWORD': 'congo1960pass',
         'HOST': 'localhost',

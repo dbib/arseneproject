@@ -198,22 +198,26 @@ def add_patient(request):
     if request.method == 'POST':
         # Process the form data when submitted
         full_name = request.POST['full_name']
+        birth_date = request.POST['birth_date']
+        email = request.POST['email']
+        phone = request.POST['phone']
         address = request.POST['address']
         symptoms = request.POST['symptoms']
         medications = request.POST['medications']
         status = request.POST['status']
         disease_history = request.POST['disease_history']
-        contact_number = request.POST['contact_number']
 
         # Create a new patient record in the database
         patient = Patient.objects.create(
             full_name=full_name,
+            birth_date=birth_date,
+            email=email,
+            phone=phone,
             address=address,
             symptoms=symptoms,
             medications=medications,
             status=status,
             disease_history=disease_history,
-            contact_number=contact_number,
             hospital=hospital,
             doctor=doctor
         )
@@ -312,37 +316,37 @@ def user_logout(request):
 
 # S'ajouter a la liste d'attente ou demande une consultation
 def ask_consultation(request):
-    # verifier si le user est connecter
+    # verifier si l'utilisateur est authentifier
     if 'user_id' not in request.session:
-        # s'il n'est pas connecter on le redirige vers la user login page
-        messages.error(request, 'Veuillez vous connecter')
+        messages.error(request, 'Vous netes pas connectee')
         return redirect('user_login')
-    
-    # Recuperer les infos du user de la session
+        
+    # Recuperer les donnees dont nous auront besoin dans notre formulaire
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
     
-    # Recuperer la liste des docteurs par hopital
-    doctors = Doctor.objects.order_by('name')
+    hospitals = Hospital.objects.order_by('name')
     
-    # Recuperer les elements du formulaire
+    # Envoie des donnees dans le model Attente
     if request.method == 'POST':
+        # recuperer les donnees du formulaire
         full_name = request.POST['full_name']
         email = request.POST['email']
-        doctor = request.POST['doctor']
+        phone = request.POST['phone']
+        hospital_id = request.POST['hospital']
+        
+        # Ajouter dans la liste d'attente
+        Attente.objects.create(
+            full_name=full_name,
+            email=email,
+            phone=phone,
+            hospital_id=hospital_id
+        )
+        
+        # Notification d'envoie
+        messages.success(request, 'vous avez ete ajouter aa la liste dattente')
     
-    # Enregistrer dans la BD
-    Attente.objects.create(
-        full_name=full_name,
-        email=email,
-        doctor=doctor
-    )
+        # Rediriger au user_dashboard
+        return redirect('user_dashboard')
     
-    # Notification d'ajout a la liste
-    messages.success(request, 'Vous avez ete ajouter a la liste demande de consultation')
-    
-    # Rediriger vers la page user dashboard
-    return redirect('user_dashboard')
-    
-    # envoie ou setup des donnees a la page html
-    return render(request, 'covidapp/ask_consultation.html', {'user': user, 'doctors':doctors})
+    return render(request, 'covidapp/ask_consultation.html', {'user': user, 'hospitals':hospitals})

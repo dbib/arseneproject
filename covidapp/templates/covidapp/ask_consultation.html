@@ -1,49 +1,19 @@
-<!-- covidapp/templates/covidapp/add_doctor.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demander une consultation</title>
-</head>
-<body>
-    <h1>Demander une consultation</h1>
+<h2> This is the ask consultation page </h2>
+<p> User connected :{{ user.full_name }}  naissance : {{ user.birth_date }}, email : {{ user.email }}, tel : {{ user.phone }}</p>
 
-    <!-- Affiche la notifcation si elle existe -->
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <!--form -->
-    <form method="post" action="{% url 'ask_consultation' %}">
+ <form method="post" action="{% url 'ask_consultation' %}">
         {% csrf_token %}
-        <label for="full_name">Nom complet:</label>
-        <input type="text" name="full_name" required>
+        <input type="hidden" name="full_name" value="{{ user.full_name }}"required>
+        <input type="hidden" name="email" value="{{ user.email }}" required>
+        <input type="hidden" name="phone" value="{{ user.phone }}"required>
         <br>
-        <label for="email">Email:</label>
-        <input type="email" name="email" required>
-        <br>
-        <label for="doctor">Selectionner un docteur:</label>
-        <select name="doctor" required>
-            {% for doctor in doctors %}
-                <option value="{{ doctor.id }}">{{ doctor.full_name }}</option>
+        <!-- Chois l'hopital que l'on veut -->
+        <label for="hospital">Selectionner un hopital:</label>
+        <select name="hospital" required>
+            {% for hospital in hospitals %}
+                <option value="{{ hospital.id }}">{{ hospital.name }}</option>
             {% endfor %}
         </select>
+        <br>
+        <input type="submit" value="Demander une consultation">
     </form>
-
-    <!-- Manager information -->
-    <p> utilisateur connectee: {{ user.full_name }}</p>
-    <form method="post" action="{% url 'user_dashboard' user_id=user.id %}">
-        {% csrf_token %}
-        <input type="submit" name="logout" value=" Log Out">
-    </form>
-
-    <!-- Lien vers la page manager_dashboard -->
-    <a href="{% url 'user_dashboard' user_id=user.id %}">Rentrer a la page Dashboard</a>
-</body>
-</html>

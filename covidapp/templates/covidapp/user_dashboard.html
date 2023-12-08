@@ -2,8 +2,16 @@
 {% block content %}
   <h2>User Dashboard</h2>
   <h3>Welcome, {{ user.full_name }}!</h3>
+  {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
   <!-- Add Patient button -->
     <a href="{% url 'ask_consultation' %}">Demander une consultation</a>
+    <br>
   <!-- Sign-out button -->
     <form method="post" action="{% url 'user_logout' %}">
         {% csrf_token %}

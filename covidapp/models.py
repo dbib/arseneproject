@@ -49,13 +49,15 @@ class Doctor(models.Model):
 #Model Patient pour la gestion des patients
 class Patient(models.Model):
     full_name = models.CharField(max_length=255)
+    birth_date = models.DateField()
+    email = models.EmailField()
+    phone = models.CharField(max_length=20) 
     address = models.TextField()
     date = models.DateField(auto_now_add=True)
     symptoms = models.TextField()
     medications = models.TextField()
     status = models.CharField(max_length=50)
     disease_history = models.TextField()
-    contact_number = models.CharField(max_length=20)
     hospital = models.ForeignKey('Hospital', on_delete=models.CASCADE)
     doctor = models.ForeignKey('Doctor', on_delete=models.CASCADE)
     
@@ -65,7 +67,9 @@ class Patient(models.Model):
 # ajoutons un Model pour les utilisateurs
 class User(models.Model):
     full_name = models.CharField(max_length=255)
+    birth_date = models.DateField()
     email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=20)
     password = models.CharField(max_length=255)
 
     def __str__(self):
@@ -75,7 +79,8 @@ class User(models.Model):
 class Attente(models.Model):
     full_name = models.CharField(max_length=255)
     email = models.EmailField()
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=20)
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

@@ -8,9 +8,10 @@ class UserRegistrationForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'password']
+        fields = ['full_name', 'birth_date', 'email', 'phone' , 'password']
         widgets = {
             'password': forms.PasswordInput,
+            'birth_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
 
