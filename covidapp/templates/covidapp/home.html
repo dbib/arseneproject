@@ -1,23 +1,22 @@
-<!-- covidapp/templates/covidapp/home.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Acceuil</title>
 </head>
 <body>
-    <h1>Welcome to the COVID App</h1>
+    <h1>Covid Hospital Management</h1>
 
-    <!-- Connect as a Doctor button -->
-    <a href="{% url 'doctor_login' %}">Connect as a Doctor</a>
-
-    <!-- Connect as a Manager button -->
-    <a href="{% url 'manager_login' %}">Connect as a Manager</a>
-    
-    <!-- Connect as a User -->
-    <a href="{% url 'user_login' %}">Connect as a User</a>
+    <!-- Connecter comme medecin -->
+    <a href="{% url 'doctor_login' %}">Se connecter en tant que medecin</a>
+    <br>
+    <!-- Connecter comme manager -->
+    <a href="{% url 'manager_login' %}">Se connecter en tant que manager</a>
+    <br>
+    <!-- Connecter comme utilisateur -->
+    <a href="{% url 'user_login' %}">Se connecter en tant utilisateur</a>
     
 </body>
 </html>

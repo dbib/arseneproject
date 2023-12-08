@@ -4,34 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Dashboard</title>
+    <title>Medecin Dashboard</title>
     <!-- Add your CSS styles here if needed -->
 </head>
 <body>
     <header>
-        <h1>Welcome, {{ doctor.full_name }}!</h1>
-
-        <!-- Display doctor information -->
+        <h3>{{ doctor.full_name }}</h3>
         <p>Email: {{ doctor.email }}</p>
         <p>Hospital: {{ doctor.hospital.name }}</p>
     </header>
 
     <nav>
-        <!-- Add Patient button -->
-        <a href="{% url 'add_patient' %}" class="btn btn-primary">Add Patient</a>
+        <!-- Ajouter un patient manuellement-->
+        <a href="{% url 'add_patient' %}" class="btn btn-primary">Ajouter un patient manuellement</a>
+        <br>
+        <!-- Voir tout les patients de l'hopital -->
+        <a href="{% url 'patient_list' %}" class="btn btn-secondary">Voir tout les patients</a>
 
-        <!-- See All Patients button -->
-        <a href="{% url 'patient_list' %}" class="btn btn-secondary">See All Patients</a>
-
-        <!-- Sign-out button -->
+        <!-- Se deconnecter -->
         <form method="post" action="{% url 'doctor_signout' %}">
             {% csrf_token %}
-            <input type="submit" value="Sign Out" class="btn btn-danger">
+            <input type="submit" value="Se deconnecter" class="btn btn-danger">
         </form>
     </nav>
 
+    <!-- les patients du medecins -->
     <section>
-        <h2>Mes patients</h2>
+        <h3>Mes patients</h3>
         <ul>
             {% for patient in patients %}
                 <li>{{ patient.full_name }} - {{ patient.phone }}</li>
@@ -39,9 +38,9 @@
         </ul>
     </section>
 
-    <!-- Section for displaying a clickable list of users from Attente -->
+    <!-- Afficher la liste d'attente -->
     <section>
-        <h2>Liste d'attente</h2>
+        <h3>Liste d'attente</h3>
         <ul>
             {% for user_in_attente in users_in_attente %}
                 <li>

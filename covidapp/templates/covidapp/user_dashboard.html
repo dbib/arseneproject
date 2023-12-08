@@ -1,7 +1,17 @@
-<!-- covidapp/templates/user_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceuil</title>
+</head>
+<body>
 {% block content %}
-  <h2>User Dashboard</h2>
-  <h3>Welcome, {{ user.full_name }}!</h3>
+  <h3>User Dashboard</h3>
+  <h3>{{ user.full_name }}!</h3>
+  
+  <!-- Afficher le message si ils existent -->
   {% if messages %}
     <ul class="messages">
       {% for message in messages %}
@@ -10,18 +20,18 @@
     </ul>
   {% endif %}
 
-  <!-- Add Patient button -->
+  <!-- Demander une consultation -->
   <a href="{% url 'ask_consultation' %}" class="btn btn-primary">Demander une consultation</a>
   <br>
 
-  <!-- Sign-out button -->
+  <!-- Se Deconnecter-->
   <form method="post" action="{% url 'user_logout' %}">
     {% csrf_token %}
-    <input type="submit" value="Log Out" class="btn btn-danger">
+    <input type="submit" value="Se deconnecter" class="btn btn-danger">
   </form>
 
-  <!-- User History Section -->
-  <h3>User History</h3>
+  <!-- Historique du medicale du user -->
+  <h3>Votre historique medical</h3>
   {% if user_patients %}
     <ul>
       {% for patient in user_patients %}
@@ -38,6 +48,6 @@
   {% else %}
     <p>No patient history available.</p>
   {% endif %}
-
-  <p>Welcome to your user dashboard!</p>
 {% endblock %}
+</body>
+</html>

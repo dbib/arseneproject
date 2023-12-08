@@ -1,4 +1,3 @@
-<!-- covidapp/templates/covidapp/manager_dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,21 +7,23 @@
     <title>Manager Dashboard</title>
 </head>
 <body>
-    <h1> {{ manager.first_name }} {{ manager.last_name }}</h1>
+    <h3> {{ manager.first_name }} {{ manager.last_name }}</h3>
 
     <!-- Aller vers ajouter un hopital -->
     <form method="get" action="{% url 'add_hospital' %}">
         <input type="submit" value="Ajouter un hopital">
     </form>
+    <br>
     
     <!-- Aller vers ajouter un docteur -->
     <form method="get" action="{% url 'add_doctor' %}">
         <input type="submit" value="Ajouter un docteur">
     </form>
+    <br>
 
     <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
         {% csrf_token %}
-        <input type="submit" name="signout" value="Sign Out">
+        <input type="submit" name="signout" value="Se deconnecter">
     </form>
 </body>
 </html>

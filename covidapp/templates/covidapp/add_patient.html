@@ -1,16 +1,15 @@
-<!-- covidapp/templates/covidapp/add_patient.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Patient</title>
+    <title>Consultation</title>
 </head>
 <body>
-    <h1>Add Patient</h1>
+    <h3>Consultation</h3>
 
-    <!-- Display success message if it exists -->
+    <!-- Afficher les messages si ils existent -->
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -19,16 +18,16 @@
         </ul>
     {% endif %}
 
-    <!-- Patient form -->
+    <!-- Formulaire d'ajout -->
     <form method="post" action="{% url 'add_patient' %}">
         {% csrf_token %}
-        <!-- Hidden inputs for doctor and hospital -->
+        <!-- Fields cachee -->
         <input type="hidden" name="doctor" value="{{ doctor.id }}">
         <input type="hidden" name="hospital" value="{{ hospital.id }}">
-        <label for="full_name">Full Name:</label>
+        <label for="full_name">Nom complet:</label>
         <input type="text" name="full_name" value="{{ initial_data.full_name }}" required>
         <br>
-        <label for="birth_date">date de naissance:</label>
+        <label for="birth_date">Date de naissance:</label>
         <input type="date" name="birth_date" required>
         <br>
         <label for="email">Email:</label>
@@ -49,13 +48,13 @@
         <label for="status">Status:</label>
         <input type="text" name="status" required>
         <br>
-        <label for="disease_history">Disease History:</label>
+        <label for="disease_history">Antecedants medicaux:</label>
         <input type="text" name="disease_history" required>
         <br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Terminer">
     </form>
 
     <!-- Link to go back to the doctor_dashboard page -->
-    <a href="{% url 'doctor_dashboard' %}">Go back to Doctor Dashboard</a>
+    <a href="{% url 'doctor_dashboard' %}">Rentrer a votre dashboard</a>
 </body>
 </html>

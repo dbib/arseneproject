@@ -1,13 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager connexion</title>
+</head>
+<body>
+    <h3>Se connecter en tant que manager</h3>
+    <!-- Afficher le message d'erreur si il existe -->
 {% if error_message %}
     <p style="color: red;">{{ error_message }}</p>
 {% endif %}
+
+<!-- Formulaire de connexion pour les managers -->
 <form method="post" action="{% url 'manager_login' %}">
     {% csrf_token %}
     <label for="pseudo">Pseudo:</label>
     <input type="text" name="pseudo" required>
     <br>
+    <br>
     <label for="password">Mot de passe:</label>
     <input type="password" name="password" required>
     <br>
-    <input type="submit" value="Login">
-</form>
+    <br>
+    <input type="submit" value="Se connecter">
+</form>  
+</body>
+</html>
+
