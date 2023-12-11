@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,18 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceuil</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>Covid Hospital Management</h1>
+    <div class="homerootbox">
+        <h1>Covid Hospital Management</h1>
 
-    <!-- Connecter comme medecin -->
-    <a href="{% url 'doctor_login' %}">Se connecter en tant que medecin</a>
-    <br>
-    <!-- Connecter comme manager -->
-    <a href="{% url 'manager_login' %}">Se connecter en tant que manager</a>
-    <br>
-    <!-- Connecter comme utilisateur -->
-    <a href="{% url 'user_login' %}">Se connecter en tant utilisateur</a>
+        <div class="homeconnect">
+            <!-- Connecter comme medecin -->
+            <a href="{% url 'doctor_login' %}">se connecter en tant que medecin</a>
+            <br>
+            <!-- Connecter comme manager -->
+            <a href="{% url 'manager_login' %}">se connecter en tant que manager</a>
+            <br>
+            <!-- Connecter comme utilisateur -->
+            <a href="{% url 'user_login' %}">se connecter en tant que patient</a>
+        </div>
+    </div>
     
 </body>
 </html>

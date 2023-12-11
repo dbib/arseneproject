@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,42 +6,75 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medecin Dashboard</title>
-    <!-- Add your CSS styles here if needed -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header>
-        <h3>{{ doctor.full_name }}</h3>
-        <p>Email: {{ doctor.email }}</p>
-        <p>Hospital: {{ doctor.hospital.name }}</p>
-    </header>
-
-    <nav>
-        <!-- Ajouter un patient manuellement-->
-        <a href="{% url 'add_patient' %}" class="btn btn-primary">Ajouter un patient manuellement</a>
-        <br>
-        <!-- Voir tout les patients de l'hopital -->
-        <a href="{% url 'patient_list' %}" class="btn btn-secondary">Voir tout les patients</a>
-
-        <!-- Se deconnecter -->
-        <form method="post" action="{% url 'doctor_signout' %}">
-            {% csrf_token %}
-            <input type="submit" value="Se deconnecter" class="btn btn-danger">
-        </form>
-    </nav>
-
+    <div class="doctordashroot">
+        <div class="doctordashinfobox">
+            <div class="doctorinfo">
+                <p class="doctordashhome">
+                    <a href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                </p>
+                <div class="doctordata">
+                    <h3>{{ doctor.full_name }}</h3>
+                    <p>Email: {{ doctor.email }}</p>
+                    <p>Hospital: {{ doctor.hospital.name }}</p>
+                </div>
+                <form method="post" action="{% url 'doctor_signout' %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Se deconnecter" class="doctorlogoutbtn">
+                </form>   
+            </div>
+            
+            <div class="doctoractions">
+                <!-- Ajouter un patient manuellement-->
+                <a href="{% url 'add_patient' %}" >Ajouter un patient</a>
+                <!-- Voir tout les patients de l'hopital -->
+                <a href="{% url 'patient_list' %}">Liste des patients</a>
+            </div>
+        </div>
     <!-- les patients du medecins -->
-    <section>
+    <section class="doctormypatientsbox" >
         <h3>Mes patients</h3>
-        <ul>
+        <table class="doctorpatienttable">
+            <tr class="firstlign">
+                <th>Nom du patient</th>
+                <th>Contact</th>
+                <th>Date de consultation</th>
+                <th>Etat</th>
+                <th>Symptoms</th>
+                <th>Medication</th>
+            </tr>
             {% for patient in patients %}
-                <li>{{ patient.full_name }} - {{ patient.phone }}</li>
+                <tr>
+                    <th>{{ patient.full_name }} </th>
+                    <th>{{ patient.phone }} </th>
+                    <th>{{ patient.date }} </th>
+                    <th>{{ patient.status }} </th>
+                    <th>{{ patient.symptoms }} </th>
+                    <th>{{ patient.medications }} </th>
+                </tr>
             {% endfor %}
-        </ul>
+        </table>
     </section>
 
     <!-- Afficher la liste d'attente -->
-    <section>
+    <section class="doctorlisteattentebox">
         <h3>Liste d'attente</h3>
+        <table class="doctorattentetable">
+            <tr class="firstlign">
+                <th>Nom du patient</th>
+            </tr>
+            {% for user_in_attente in users_in_attente %}
+                <tr>
+                    <th>
+                        <a href="{% url 'add_patient' %}?attente_id={{ user_in_attente.id }}">
+                        {{ user_in_attente.full_name }}
+                    </a>
+                    </th>
+                </tr>
+            {% endfor %}
+        </table>
         <ul>
             {% for user_in_attente in users_in_attente %}
                 <li>
@@ -51,5 +85,7 @@
             {% endfor %}
         </ul>
     </section>
+    </div>
+    
 </body>
 </html>

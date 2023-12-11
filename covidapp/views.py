@@ -145,7 +145,7 @@ def doctor_login(request):
         except Doctor.DoesNotExist:
             # Si les elements ne correspondent a personne on renvoie a la page login avec
             # une notification d'erreur
-            message.error(request, 'Email ou mot de passe incorrect')
+            messages.error(request, 'Email ou mot de passe incorrect')
             return redirect('doctor_login')
             
         # Si les elements correspondent a ceux d'un docteur dans la BD, on cree une session
