@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,57 +6,69 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un docteur</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h3>Ajouter un docteur</h3>
+    <div class="manageradddocroot">
+        <div class="managerdashheader">
+            <p class="managername"><a href="{% url 'manager_dashboard' manager_id=manager.id %}">{{ manager.first_name }}_{{manager.last_name}}</a></p>
+            <p class="managerappname">BIKISA</p>
+            <div class="managerlogoutbox">
+                <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
+                    {% csrf_token %}
+                    <input type="submit" name="signout" value="Se deconnecter" class="mlogoutbutton">
+                </form>
+            </div>
+        </div>
+        <div class="manageradddoccontainer">
+            <div class="manageradddocbox">
+                <h3>Ajouter un medecin</h3>
+                 <!-- Affiche la notifcation si elle existe -->
+                {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+                {% endif %}
 
-    <!-- Affiche la notifcation si elle existe -->
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <!-- Formulaire -->
-    <form method="post" action="{% url 'add_doctor' %}">
-        {% csrf_token %}
-        <label for="full_name">Nom complet:</label>
-        <input type="text" name="full_name" required>
-        <br>
-        <label for="email">Email:</label>
-        <input type="email" name="email" required>
-        <br>
-        <label for="password">Mot de passe:</label>
-        <input type="password" name="password" required>
-        <br>
-        <label for="address">Address:</label>
-        <input type="text" name="address" required>
-        <br>
-        <!-- Le createur du compte parmi les manageurs est automatique ajouter -->
-        <input type="hidden" name="creator" value="{{ manager.id }}">
-        <label for="hospital">Selectionner l'hopital ou travail le docteur:</label>
-        <select name="hospital" required>
-            {% for hospital in hospitals %}
-                <option value="{{ hospital.id }}">{{ hospital.name }}</option>
-            {% endfor %}
-        </select>
-        <!-- Lien vers la page ajouter un hopital -->
-        <a href="{% url 'add_hospital' %}">Si l'hopital n'existe pas dans la selection?</a>
-        <br>
-        <br>
-        <input type="submit" value="Ajouter">
-    </form>
-
-    <!-- Manager information -->
-    <p> Manager connectee: {{ manager.first_name }} {{ manager.last_name }}</p>
-    <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
-        {% csrf_token %}
-        <input type="submit" name="signout" value="Sign Out">
-    </form>
-
-    <!-- Lien vers la page manager_dashboard -->
-    <a href="{% url 'manager_dashboard' manager_id=manager.id %}">Rentrer au Dashboard</a>
+                <!-- Formulaire -->
+                <form method="post" action="{% url 'add_doctor' %}">
+                {% csrf_token %}
+                <label for="full_name">Nom complet:</label>
+                <br>
+                <input type="text" name="full_name" class="appinputfield" required>
+                <br>
+                <label for="email">Email:</label>
+                <br>
+                <input type="email" name="email" class="appinputfield" required>
+                <br>
+                <label for="password">Mot de passe:</label>
+                <br>
+                <input type="password" name="password" class="appinputfield" required>
+                <br>
+                <label for="address">Address:</label>
+                <br>
+                <input type="text" name="address" class="appinputfield" required>
+                <br>
+                <!-- Le createur du compte parmi les manageurs est automatique ajouter -->
+                <input type="hidden" name="creator" value="{{ manager.id }}">
+                <label for="hospital">Selectionner l'hopital ou travail le docteur:</label>
+                <br>
+                <select name="hospital" class="appinputfield" required>
+                {% for hospital in hospitals %}
+                    <option value="{{ hospital.id }}">{{ hospital.name }}</option>
+                {% endfor %}
+                </select>
+                <br>
+                <!-- Lien vers la page ajouter un hopital -->
+                <a href="{% url 'add_hospital' %} " class="hospitalNotExist">Si l'hopital n'existe pas dans la selection?</a>
+                <br>
+                <br>
+                <input type="submit" value="Ajouter" class="connectbutton">
+            </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

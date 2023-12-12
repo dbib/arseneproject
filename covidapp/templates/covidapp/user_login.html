@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,30 +6,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Se connecter</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-
-    <!-- Affiche le message d'erreur si il existe -->
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <!-- User login form -->
-    <form method="post" action="{% url 'user_login' %}">
-        {% csrf_token %}
-        <label for="email">Email:</label>
-        <input type="email" name="email" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
-        <br>
-        <input type="submit" value=" Se Connecter">
-    </form>
-    <!-- creer un compte -->
-    <a href="{% url 'user_registration' %}">creer un compte</a>
+    <div class="userloginroot">
+        <div class="userloginelementbox">
+            <h1> Patient</h1>
+            <!-- Affiche le message d'erreur si il existe -->
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <!-- formulaire -->
+            <form method="post" action="{% url 'user_login' %}">
+                {% csrf_token %}
+                <label for="email">Email:</label>
+                <br>
+                <input type="email" name="email" class="appinputfield" required>
+                <br>
+                <label for="password">Password:</label>
+                <br>
+                <input type="password" name="password" class="appinputfield" required>
+                <br>
+                <input type="submit" value=" Se Connecter" class="connectbutton">
+            </form>
+            <!-- creer un compte -->
+            <a href="{% url 'user_registration' %} " class="userNotExist">creer un compte</a>
+        </div>
+    </div>
 </body>
 </html>

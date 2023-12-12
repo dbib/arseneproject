@@ -1,17 +1,34 @@
-<!-- covidapp/templates/user_registration.html -->
-<h2>User Registration</h2>
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-{% if error %}
-  <p style="color: red;">{{ error }}</p>
-{% endif %}
-<form method="post" action="">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Register">
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creer un compte patient</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="userregistrationroot">
+      <div class="userregistrationbox">
+        <h2>User Registration</h2>
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% if error %}
+          <p class="message">{{ error }}</p>
+        {% endif %}
+        <form method="post" action="">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" value="S'enregistrer" class="connectbutton">
+        </form>
+      </div>
+    </div>
+</body>
+</html>
+

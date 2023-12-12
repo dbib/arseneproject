@@ -1,29 +1,48 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager Dashboard</title>
+    <title>Manager {{manager.first_name}}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h3> {{ manager.first_name }} {{ manager.last_name }}</h3>
+    <div class="managerdashroot">
+        <div class="managerdashheader">
+            <p class="managername">{{ manager.first_name }}_{{manager.last_name}}</p>
+            <p class="managerappname">BIKISA</p>
+            <div class="managerlogoutbox">
+                <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
+                    {% csrf_token %}
+                    <input type="submit" name="signout" value="Se deconnecter" class="mlogoutbutton">
+                </form>
+            </div>
+        </div>
+        <div class="managerdashelement">
+            <div class="managertextbox">
+                <h1>STOP EBOLA </h1>
+                <p> Parceque le virus Ebola constitue un danger enorme par la sante,
+                 il est urgent et de mettre le plus des medecins et d'infrastructure a la disposition
+                 des malades et des personnes qui presentent les symptoms.
+                 Cette page vous pouvez ajouter des medecins ou des hopitaux dans le system
+                 afin d'apporter un soutient dans un bref delais.
+                 </p>
+                 <!-- Aller vers ajouter un hopital -->
+                <form method="get" action="{% url 'add_hospital' %}">
+                    <input type="submit" value="Ajouter un hopital" class="manageraction">
+                </form>
 
-    <!-- Aller vers ajouter un hopital -->
-    <form method="get" action="{% url 'add_hospital' %}">
-        <input type="submit" value="Ajouter un hopital">
-    </form>
-    <br>
-    
-    <!-- Aller vers ajouter un docteur -->
-    <form method="get" action="{% url 'add_doctor' %}">
-        <input type="submit" value="Ajouter un docteur">
-    </form>
-    <br>
-
-    <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
-        {% csrf_token %}
-        <input type="submit" name="signout" value="Se deconnecter">
-    </form>
+                <!-- Aller vers ajouter un docteur -->
+                <form method="get" action="{% url 'add_doctor' %}">
+                    <input type="submit" value="Ajouter un medecin" class="manageraction">
+                </form> 
+            </div>
+            <div class="managerimgbox">
+                <img src="{% static 'images/managerdash.jpg' %}" alt="microscope image">
+            </div>
+        </div>
+    </div>
 </body>
 </html>

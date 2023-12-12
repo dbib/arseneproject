@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,39 +6,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un hopital</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h3>Ajouter un hopital</h3>
-
-    <!-- Form pour ajouter -->
-    <form method="post" action="{% url 'add_hospital' %}">
-        {% csrf_token %}
-        <label for="name">Nom de l'hopital:</label>
-        <input type="text" name="name" required>
-        <br>
-        <br>
-        <label for="address">Address:</label>
-        <input type="text" name="address" required>
-        <br>
-        <input type="submit" value="Ajouter">
-    </form>
-
-    <!-- List d'hopitaux -->
-    <h3>Liste d'hopitaux</h3>
-    <ul>
-        {% for hospital in hospitals %}
-            <li>{{ hospital.name }} - {{ hospital.address }} (Created by: {{ hospital.creator }})</li>
-        {% endfor %}
-    </ul>
-
-    <!-- Manager information -->
-    <p> Manager connectee: {{ manager.first_name }} {{ manager.last_name }}</p>
-    <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
-        {% csrf_token %}
-        <input type="submit" name="signout" value="Se deconnecter">
-    </form>
-
-    <!-- Lien vers la page manager_dashboard -->
-    <a href="{% url 'manager_dashboard' manager_id=manager.id %}">Rentrer auDashboard</a>
+    <div class="manageraddhospitalroot">
+        <div class="managerdashheader">
+            <p class="managername"><a href="{% url 'manager_dashboard' manager_id=manager.id %}">{{ manager.first_name }}_{{manager.last_name}}</a></p>
+            <p class="managerappname">BIKISA</p>
+            <div class="managerlogoutbox">
+                <form method="post" action="{% url 'manager_dashboard' manager_id=manager.id %}">
+                    {% csrf_token %}
+                    <input type="submit" name="signout" value="Se deconnecter" class="mlogoutbutton">
+                </form>
+            </div>
+        </div>
+        <div class="addhospitalcontainer">
+            <div class="manageraddhospitalbox">
+                <h3>Ajouter un hopital</h3>
+                <!-- Form pour ajouter -->
+                <form method="post" action="{% url 'add_hospital' %}">
+                 {% csrf_token %}
+                    <label for="name">Nom de l'hopital:</label>
+                    <br>
+                    <input type="text" name="name" class="appinputfield" required>
+                    <br>
+                    <label for="address">Address:</label>
+                    <br>
+                    <input type="text" name="address" class="appinputfield" required>
+                    <br>
+                    <input type="submit" value="Ajouter" class="connectbutton">
+                </form>
+            </div>
+        </div>
+        <div class="managerhospitallist">
+            <h3>Liste d'hopitaux</h3>
+            <table class="managerhospitaltable">
+                <tr class="firstlign">
+                    <th>Nom de l'hopital</th>
+                    <th>Address</th>
+                </tr>
+                {% for hospital in hospitals %}
+                <tr>
+                    <th>{{ hospital.name }} </th>
+                    <th>{{ hospital.address }} </th>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 </body>
 </html>

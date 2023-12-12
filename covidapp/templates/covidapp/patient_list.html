@@ -9,18 +9,43 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h3>Liste des patients</h3>
-
-    <!-- Affiche les infos relatif a l'hopital -->
-    <p>Hopital: {{ hospital.name }}</p>
-
-    <!-- Afficher tout les patients de l'hopital -->
-    <ul>
-        {% for patient in patients %}
-            <li>{{ patient.full_name }} - {{ patient.contact_number }} - {{ patient.medications }} - {{ patient.status }} - {{ patient.doctor }}</li>
-        {% endfor %}
-    </ul>
-
+    <div class="patientlistroot">
+        <div class="doctordashheader">
+            <p class="doctorname"><a href="{% url 'doctor_dashboard' %}">{{doctor.full_name}}</a></p>
+            <p class="appname">BIKISA</p>
+            <div class="doctorlogoutbox">
+                <form method="post" action="{% url 'doctor_signout' %}">
+                    {% csrf_token %}
+                    <input type="submit" name="signout" value="Se deconnecter" class="mlogoutbutton">
+                </form>
+            </div>
+        </div>
+        <div class="patientlistcontainer">
+            <div class="patientlistbox">
+                <h3>Liste des patients</h3>
+                <!-- Affiche les infos relatif a l'hopital -->
+                <p>Hopital: {{ hospital.name }}</p>
+                <table class="patientlisttable">
+                    <tr class="firstlign">
+                        <th>Nom du patient</th>
+                        <th>Contact</th>
+                        <th>Medication</th>
+                        <th>Etat du patient</th>
+                        <th>Medecin</th>
+                    </tr>
+                    {% for patient in patients %}
+                    <tr>
+                        <th>{{ patient.full_name }} </th>
+                        <th>{{ patient.phone }} </th>
+                        <th>{{ patient.medications }} </th>
+                        <th>{{ patient.status }} </th>
+                        <th>{{ patient.doctor }} </th>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
     <!-- Lien vers le dashboard medecin-->
     <a href="{% url 'doctor_dashboard' %}">Rentrer a votre dashboard</a>
 </body>
