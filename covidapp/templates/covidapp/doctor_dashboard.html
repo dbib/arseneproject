@@ -33,6 +33,25 @@
                 <a href="{% url 'patient_list' %}">Liste des patients</a>
             </div>
         </div>
+    <!-- Afficher la liste d'attente -->
+    <section class="doctorlisteattentebox">
+        <h3>Liste d'attente </h3>
+        <p>Veuillez selectionner un malade pour le consulter</p>
+        <table class="doctorattentetable">
+            <tr class="firstlign">
+                <th>Nom </th>
+            </tr>
+            {% for user_in_attente in users_in_attente %}
+                <tr class="clicablepatientlist">
+                    <th>
+                        <a href="{% url 'add_patient' %}?attente_id={{ user_in_attente.id }}">
+                        {{ user_in_attente.full_name }}
+                    </a>
+                    </th>
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
     <!-- les patients du medecins -->
     <section class="doctormypatientsbox" >
         <h3>Mes patients</h3>
@@ -56,34 +75,6 @@
                 </tr>
             {% endfor %}
         </table>
-    </section>
-
-    <!-- Afficher la liste d'attente -->
-    <section class="doctorlisteattentebox">
-        <h3>Liste d'attente</h3>
-        <table class="doctorattentetable">
-            <tr class="firstlign">
-                <th>Nom du patient</th>
-            </tr>
-            {% for user_in_attente in users_in_attente %}
-                <tr>
-                    <th>
-                        <a href="{% url 'add_patient' %}?attente_id={{ user_in_attente.id }}">
-                        {{ user_in_attente.full_name }}
-                    </a>
-                    </th>
-                </tr>
-            {% endfor %}
-        </table>
-        <ul>
-            {% for user_in_attente in users_in_attente %}
-                <li>
-                    <a href="{% url 'add_patient' %}?attente_id={{ user_in_attente.id }}">
-                        {{ user_in_attente.full_name }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
     </section>
     </div>
     

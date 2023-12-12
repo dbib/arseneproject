@@ -207,13 +207,13 @@ li {
 
 .doctorlogoutbtn {
   font-family: RobotoLight, OpenSansLight, Sans-serif;
-  padding: 10px;
+  padding: 5px;
   background-color: #007558;
   border: 0.5px solid #007558;
   border-radius: 5px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   color: #FFF;
-  margin: 3px 0px;
+  margin: 8px 0px;
   cursor: pointer;
 }
 
@@ -226,6 +226,7 @@ li {
 
 .doctoractions a {
   font-family: RobotoLight, OpenSansLight, Sans-serif;
+  font-size: 10px;
   border: 0.5px solid #007558;
   margin: 5px;
   padding: 10px 5px;
@@ -247,6 +248,10 @@ li {
   color: #FFF;
 }
 
+.doctormypatientsbox {
+  margin: 20px 0px;
+}
+
 .doctorpatienttable {
   border: 1px solid #cbcbcb;
 }
@@ -262,6 +267,34 @@ li {
   font-family: RobotoBold, OpenSansBold, Sans-serif;
   font-size: 12px;
   color: #404040;
+}
+
+.doctorlisteattentebox {
+  width: 81vw;
+  margin: 20px 0px;
+  padding: 20px 0px;
+  border-bottom: 1px solid black;
+}
+
+.doctorlisteattentebox p{
+  font-size: 13px;
+}
+
+.doctorattentetable {
+  width: 100%;
+  display: flex;
+  align-items: start;
+}
+
+.clicablepatientlist a{
+  color: black;
+  font-size: 12px;
+}
+
+.clicablepatientlist a:hover{
+  color: #007558;
+  font-size: 12px;
+  padding: 10px 0px;
 }
 
 /*  PAGE CONSULTATION */
@@ -685,4 +718,91 @@ li {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   background-color: #006045;
   color: #FFF;
+}
+
+
+/*  PAGE USER DASHBOARD */
+.userdashheader {
+  border-bottom: 1px solid #7aa297;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0px 5px;
+}
+
+.username {
+  font-family: RobotoBold, OpenSansBold, Sans-serif;
+  font-size: 10px;
+}
+
+.userappname {
+  font-family: RobotoBold, OpenSansBold, Sans-serif;
+  font-size: 10px;
+  text-align: center;
+}
+
+.userlogoutbox {
+  display:flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.userhistoryelement {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-radius: 5px;
+  margin: 20px 5px;
+  padding: 10px 5px;
+  font-size: 12px;
+}
+
+.userdashask {
+  margin: 10px;
+}
+
+.userdashask .connectbutton {
+  font-size: 10px;
+}
+
+.userdashmedicalhistory{
+  margin: 10px;
+}
+
+.userconsultroot {
+  width: 100vw;
+  height: 100vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userconsultelement {
+  background-color: #FFF;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  width: 40%;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.userconsultelement form{
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userconsultelement h1{
+  font-size: 30px;
+  text-align: center;
+}
+
+.userconsultelement p{
+  font-size: 15px;
+  text-align: center;
+}
+
+.messages2 {
+  color: #007558;
+  font-family: RobotoBold, OpenSansBold, Sans-serif;
+  font-weight: Bold;
+  font-size: 13px;
+  padding: 0;
 }

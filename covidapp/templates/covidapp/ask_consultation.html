@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,25 +6,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demander une consultation</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-<p> {{ user.full_name }}  naissance : {{ user.birth_date }}, email : {{ user.email }}, tel : {{ user.phone }}</p>
-
- <form method="post" action="{% url 'ask_consultation' %}">
-        {% csrf_token %}
-        <input type="hidden" name="full_name" value="{{ user.full_name }}"required>
-        <input type="hidden" name="email" value="{{ user.email }}" required>
-        <input type="hidden" name="phone" value="{{ user.phone }}"required>
-        <br>
-        <!-- Chois l'hopital que l'on veut -->
-        <label for="hospital">Selectionner un hopital:</label>
-        <select name="hospital" required>
-            {% for hospital in hospitals %}
-                <option value="{{ hospital.id }}">{{ hospital.name }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <input type="submit" value="Demander une consultation">
-    </form>
+    <div class="userconsultroot">
+        <div class="userconsultelement">
+            <h1>Demande de consultation</h1>
+            <p> Si vous vous senter vieullez limiter au maximum les contacts physique aupres de vous
+            notre equipe vos contact dans le plus bref delais pour vous consulter</p>
+            <form method="post" action="{% url 'ask_consultation' %}">
+            {% csrf_token %}
+                <input type="hidden" name="full_name" value="{{ user.full_name }}"required>
+                <input type="hidden" name="email" value="{{ user.email }}" required>
+                <input type="hidden" name="phone" value="{{ user.phone }}"required>
+                <br>
+                <!-- Chois l'hopital que l'on veut -->
+                <label for="hospital">Veuillez selectionner l'hopital le plus proche:</label>
+                <br>
+                <select name="hospital" class="appinputfield2" required>
+                {% for hospital in hospitals %}
+                    <option value="{{ hospital.id }}">{{ hospital.name }}</option>
+                {% endfor %}
+                </select>
+                <br>
+                <input type="submit" value="Envoyer" class="connectbutton">
+            </form>
+        </div>
+    </div>
 </body>
 </html>

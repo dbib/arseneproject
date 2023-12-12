@@ -1,53 +1,63 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceuil</title>
+    <title>{{ user.full_name }}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-{% block content %}
-  <h3>User Dashboard</h3>
-  <h3>{{ user.full_name }}!</h3>
-  
-  <!-- Afficher le message si ils existent -->
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  <!-- Demander une consultation -->
-  <a href="{% url 'ask_consultation' %}" class="btn btn-primary">Demander une consultation</a>
-  <br>
-
-  <!-- Se Deconnecter-->
-  <form method="post" action="{% url 'user_logout' %}">
-    {% csrf_token %}
-    <input type="submit" value="Se deconnecter" class="btn btn-danger">
-  </form>
-
-  <!-- Historique du medicale du user -->
-  <h3>Votre historique medical</h3>
-  {% if user_patients %}
-    <ul>
-      {% for patient in user_patients %}
-        <li>
-          <strong>Doctor Name:</strong> {{ patient.doctor.full_name }}<br>
-          <strong>Symptoms:</strong> {{ patient.symptoms }}<br>
-          <strong>Status:</strong> {{ patient.status }}<br>
-          <strong>Date:</strong> {{ patient.date }}<br>
-          <strong>Medications:</strong> {{ patient.medications }}<br>
-          <strong>Hospital:</strong> {{ patient.hospital.name }}<br>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No patient history available.</p>
-  {% endif %}
-{% endblock %}
+  <div class="userdashroot">
+    <div class="userdashheader">
+            <p class="username">{{ user.full_name }}</p>
+            <p class="userappname">BIKISA</p>
+            <div class="userlogoutbox">
+                <form method="post" action="{% url 'user_logout' %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Se deconnecter" class="mlogoutbutton">
+                  </form>
+            </div>
+        </div>
+        <div class="userdashelement">
+          <div class="userdashask">
+            <p>Bienvenue {{ user.full_name}}, veuillez demander une consultation pour entre dans la liste d'attente</p> 
+            <!-- Demander une consultation -->
+                <a href="{% url 'ask_consultation' %}" class="connectbutton">Demander une consultation</a>
+                <br>
+          </div>
+          <div class="userdashmedicalhistory">
+              <!-- Afficher le message si ils existent -->
+              {% if messages %}
+              <ul class="messages2">
+                  {% for message in messages %}
+                      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="userhistorybox">
+                  <!-- Historique du medicale du user -->
+                  <h3>Votre historique medical</h3>
+                  {% if user_patients %}
+                    <ul>
+                    {% for patient in user_patients %}
+                        <li class="userhistoryelement">
+                        <strong>Date:</strong> {{ patient.date }}<br>
+                        <strong>Hopital:</strong> {{ patient.hospital.name }}<br>
+                        <strong>Nom du medecin:</strong> {{ patient.doctor.full_name }}<br>
+                        <strong>Symptoms:</strong> {{ patient.symptoms }}<br>
+                        <strong>Medications:</strong> {{ patient.medications }}<br>
+                        <strong>Status:</strong> {{ patient.status }}<br>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>Aucune historique. Vos consultations s'affiche ici</p>
+                    {% endif %}
+                </div>
+          </div>
+        </div>
+  </div>  
 </body>
 </html>
